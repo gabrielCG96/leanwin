@@ -131,6 +131,39 @@
                             Style="{DynamicResource ModalSubtextStyle}"/>
                 </StackPanel>
 
+                <!-- Failed changes section -->
+                <Border x:Name="ApplyIssuesPanel"
+                        Visibility="Collapsed"
+                        BorderBrush="{DynamicResource AppBorderColor}"
+                        BorderThickness="0,1,0,1"
+                        Padding="24,12,24,14">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <TextBlock Text="&#xEA39;"
+                                       FontFamily="{DynamicResource AppIconFontFamily}"
+                                       FontSize="14"
+                                       Foreground="{DynamicResource IconErrorColor}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0"/>
+                            <TextBlock Text="%LANG:ApplyIssuesHeader%"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource AppFgColor}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ScrollViewer MaxHeight="170" VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                            <StackPanel x:Name="ApplyIssuesList" Margin="22,0,0,0"/>
+                        </ScrollViewer>
+                        <Button x:Name="ApplyOpenLogBtn"
+                                Style="{DynamicResource SecondaryButtonStyle}"
+                                HorizontalAlignment="Left"
+                                Height="28" Padding="12,0" Margin="22,10,0,0"
+                                AutomationProperties.Name="%LANG:ApplyOpenLog%">
+                            <TextBlock Text="%LANG:ApplyOpenLog%" FontSize="12" VerticalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
                 <!-- Reboot required section -->
                 <Border x:Name="ApplyRebootPanel"
                         Visibility="Collapsed"

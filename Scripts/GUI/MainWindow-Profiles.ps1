@@ -108,3 +108,29 @@ function Select-ProfilePreset {
         Invoke-ApplyTweakPresetMap -PresetMap $script:ProfilePresetMaps[$Name] -Check $true
     }
 }
+
+<#
+    .SYNOPSIS
+        Selects one tweak by its FeatureId, as if its checkbox was ticked.
+
+    .OUTPUTS
+        System.Boolean. $false when the tweak has no checkbox in this window (for example on an older Windows build).
+#>
+function Select-FeatureControl {
+    param(
+        [System.Windows.Window]$Window,
+        [string]$FeatureId
+    )
+
+    foreach ($controlName in $script:UiControlMappings.Keys) {
+        $mapping = $script:UiControlMappings[$controlName]
+        if ($mapping.Type -ne 'feature' -or $mapping.FeatureId -ne $FeatureId) { continue }
+
+        $control = $Window.FindName($controlName)
+        if ($control -is [System.Windows.Controls.CheckBox] -and $control.Visibility -eq 'Visible') {
+            $control.IsChecked = $true
+            return $true
+        }
+    }
+    return $false
+}

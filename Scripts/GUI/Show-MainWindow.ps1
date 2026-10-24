@@ -43,6 +43,7 @@ function Show-MainWindow {
     $exportConfigBtn = $window.FindName('ExportConfigBtn')
     $restoreBackupBtn = $window.FindName('RestoreBackupBtn')
     $startupManagerBtn = $window.FindName('StartupManagerBtn')
+    $guidedSetupBtn = $window.FindName('GuidedSetupBtn')
     $systemReportBtn = $window.FindName('SystemReportBtn')
     $detectHardwareBtn = $window.FindName('DetectHardwareBtn')
     $homeContentPanel = $window.FindName('HomeContentPanel')
@@ -226,6 +227,33 @@ function Show-MainWindow {
         })
     }
 
+    # ---- Guided setup: plain language questions that pick the tweaks ----
+    if ($guidedSetupBtn) {
+        $guidedSetupBtn.Add_Click({
+            try {
+                $choice = Show-GuidedSetupWindow -Owner $window
+                if (-not $choice) { return }
+
+                # The suggestion replaces the current selection, so start from a clean slate
+                if ($ShowCurrentlyAppliedTweaksCheckBox -and $ShowCurrentlyAppliedTweaksCheckBox.IsChecked -eq $true) {
+                    $ShowCurrentlyAppliedTweaksCheckBox.IsChecked = $false
+                }
+                Clear-TweakSelections -Window $window
+                Select-ProfilePreset -Name $choice.ProfileName
+                foreach ($extraFeatureId in $choice.ExtraFeatureIds) {
+                    Select-FeatureControl -Window $window -FeatureId $extraFeatureId | Out-Null
+                }
+                if ($choice.SelectDefaultApps -and $appsPanel) {
+                    Invoke-AppPreset -AppsPanel $appsPanel -MatchFilter { param($c) $c.SelectedByDefault -eq $true } -Check $true
+                }
+                Update-TweakPresetStates -Window $window
+            }
+            catch {
+                Write-Warning "Guided setup failed: $($_.Exception.Message)"
+                Show-MessageBox -Owner $window -Message $_.Exception.Message -Title (Get-Translation -Key 'ErrorTitle') -Button 'OK' -Icon 'Error' | Out-Null
+            }
+        })
+    }
     # ---- Startup programs ----
     if ($startupManagerBtn) {
         $startupManagerBtn.Add_Click({

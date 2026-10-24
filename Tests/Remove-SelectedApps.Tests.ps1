@@ -396,8 +396,10 @@ Describe 'Remove-AppxApp' {
         @{ Operation = 'Provisioned'; Code = '0x80070002'; Build = 19045; Expected = $true }
         @{ Operation = 'Appx'; Code = '0x80070002'; Build = 22000; Expected = $false }
         @{ Operation = 'Provisioned'; Code = '0x80070002'; Build = 26100; Expected = $false }
-        @{ Operation = 'Appx'; Code = '0x80070005'; Build = 19045; Expected = $false }
-        @{ Operation = 'Provisioned'; Code = '0x80070005'; Build = 19045; Expected = $false }
+        @{ Operation = 'Appx'; Code = '0x80070005'; Build = 19045; Expected = $true }
+        @{ Operation = 'Provisioned'; Code = '0x80070005'; Build = 19045; Expected = $true }
+        @{ Operation = 'Appx'; Code = '0x80070005'; Build = 26300; Expected = $true }
+        @{ Operation = 'Provisioned'; Code = '0x80070005'; Build = 26300; Expected = $true }
         @{ Operation = 'Appx'; Code = '0x80070002'; Build = $null; Expected = $false }
     ) {
         $script:WinVersion = $Build
@@ -420,8 +422,21 @@ Describe 'Remove-AppxApp' {
         $output[-1] | Should -Be $Expected
         @($output | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] }).Count | Should -Be $(if ($Expected) { 0 } else { 1 })
         Should -Invoke Write-Host -Times $(if ($Expected) { 1 } else { 0 }) -Exactly -ParameterFilter {
-            $Object -eq 'Windows 10 Appx removal reported error 0x80070002 for One.App_1.0, but the removal succeeded.'
+            $Object -eq 'Windows reported an error while cleaning up One.App_1.0, but the package was removed.'
         }
+    }
+
+    It 'still fails on access denied when the package is still installed' {
+        $script:WinVersion = 26300
+        Mock Invoke-NonBlocking { param($ScriptBlock, $ArgumentList) & $ScriptBlock @ArgumentList }
+        Mock Get-AppxPackage { [PSCustomObject]@{ PackageFullName = 'One.App_1.0' } }
+        Mock Get-AppxProvisionedPackage {}
+        Mock Remove-AppxPackage { Write-Error 'Deployment failed with HRESULT: 0x80070005' }
+        Mock Remove-ProvisionedAppxPackage {}
+
+        $output = @(Remove-AppxApp -app 'One.App' -targetUser 'AllUsers' 2>&1)
+
+        $output[-1] | Should -BeFalse
     }
 
     It 'recognizes a Windows 10 removal HRESULT without relying on English error text' {
@@ -568,7 +583,7 @@ Describe 'Remove-AppxApp' {
                 Mock Invoke-NonBlocking { $script:appxWorkerResult }
                 Remove-AppxApp -app 'One.App' -targetUser 'CurrentUser' | Should -BeTrue
                 Should -Invoke Write-Host -Times 1 -Exactly -ParameterFilter {
-                    $Object -eq 'Windows 10 Appx removal reported error 0x80070002 for One.App_1.0, but the removal succeeded.'
+                    $Object -eq 'Windows reported an error while cleaning up One.App_1.0, but the package was removed.'
                 }
             }
         }

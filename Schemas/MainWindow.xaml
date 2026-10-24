@@ -763,6 +763,12 @@
                                     </Grid.ColumnDefinitions>
                                     
                                     <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <Button x:Name="GuidedSetupBtn" ToolTip="%LANG:GuidedButtonTooltip%" Style="{DynamicResource SecondaryButtonStyle}" Padding="10,0" Height="32" Margin="0,0,10,0" AutomationProperties.Name="%LANG:GuidedButton%">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="&#xE897;" FontFamily="{DynamicResource AppIconFontFamily}" FontSize="15" VerticalAlignment="Center" Margin="0,3,6,0"/>
+                                                <TextBlock Text="%LANG:GuidedButton%" FontSize="13" VerticalAlignment="Center" Margin="0,0,0,1"/>
+                                            </StackPanel>
+                                        </Button>
                                         <ToggleButton x:Name="TweaksPresetsBtn" Height="32" Padding="10,0" Margin="0,0,10,0" AutomationProperties.Name="%LANG:TweaksQuickSelectAutomationName%">
                                             <ToggleButton.Style>
                                                 <Style TargetType="ToggleButton">

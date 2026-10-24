@@ -64,6 +64,7 @@ function Remove-SelectedApps {
         else {
             if (-not (Remove-AppxApp -app $app -targetUser $targetUser)) {
                 $script:AppRemovalFailures++
+                Add-ChangeIssue -Name (Get-AppDisplayName $app) -Message $script:LastAppxRemovalError
             }
         }
     }
@@ -113,6 +114,9 @@ function Remove-SelectedApps {
     }
 
     $script:AppRemovalFailures += $wingetRemovalFailures.Count
+    foreach ($failedApp in @($wingetRemovalFailures.Keys | Sort-Object)) {
+        Add-ChangeIssue -Name (Get-AppDisplayName $failedApp) -Message (Get-Translation -Key 'ApplyIssueWingetFailed')
+    }
 
     return ($script:AppRemovalFailures -eq $failuresBefore)
 }
@@ -241,6 +245,18 @@ function Write-WinGetUninstallOutput {
 
 <#
     .SYNOPSIS
+    Returns the friendly name of an app for messages, or its identifier when there is no translation.
+#>
+function Get-AppDisplayName {
+    param([string]$AppId)
+
+    $name = Get-Translation -Key $AppId -Field 'FriendlyName' -Section 'Apps'
+    if ([string]::IsNullOrWhiteSpace($name)) { return $AppId }
+    return $name
+}
+
+<#
+    .SYNOPSIS
     Removes an app via Remove-AppxPackage / Remove-ProvisionedAppxPackage.
 
     .PARAMETER app
@@ -256,7 +272,8 @@ function Remove-AppxApp {
     $isWindows10 = $script:WinVersion -ge 10240 -and $script:WinVersion -lt 22000
 
     try {
-        $removalResult = Invoke-NonBlocking -ScriptBlock {
+        $script:LastAppxRemovalError = $null
+        $removalResult = Invoke-NonBlocking -ErrorVariable appxRemovalErrors -ErrorAction Continue -ScriptBlock {
             param($pattern, $target, $isWindows10)
 
             $removalErrors = @()
@@ -269,8 +286,12 @@ function Remove-AppxApp {
             # Suppress it only after confirming the exact package is absent in the same scope.
             function Test-IgnorableAppxRemovalError {
                 param($RemovalError, [string]$PackageName, [switch]$Provisioned)
-                if (-not ($isWindows10 -and ($RemovalError.Exception.HResult -eq -2147024894 -or
-                    $RemovalError.ToString() -match '\b0x80070002\b'))) {
+                # 0x80070002 (file not found) on Windows 10, and 0x80070005 (access denied) everywhere: Windows reports the
+                # latter when it cannot delete the leftover files of a package that was already removed (they sit in
+                # WindowsApps\Deleted and go away on their own). Both only count after the package is confirmed absent.
+                $isFileNotFound = $isWindows10 -and ($RemovalError.Exception.HResult -eq -2147024894 -or $RemovalError.ToString() -match '\b0x80070002\b')
+                $isAccessDenied = ($RemovalError.Exception.HResult -eq -2147024891) -or ($RemovalError.ToString() -match '0x80070005|E_ACCESSDENIED|Access is denied|Acesso negado')
+                if (-not ($isFileNotFound -or $isAccessDenied)) {
                     return $false
                 }
 
@@ -316,7 +337,7 @@ function Remove-AppxApp {
                 }
                 catch {
                     if (Test-IgnorableAppxRemovalError $_ -PackageName $package.PackageFullName) {
-                        $ignoredRemovalMessages.Add("Windows 10 Appx removal reported error 0x80070002 for $($package.PackageFullName), but the removal succeeded.")
+                        $ignoredRemovalMessages.Add("Windows reported an error while cleaning up $($package.PackageFullName), but the package was removed.")
                     }
                     else {
                         Write-Error -ErrorRecord $_ -ErrorAction Continue -ErrorVariable +removalErrors
@@ -332,7 +353,7 @@ function Remove-AppxApp {
                     }
                     catch {
                         if (Test-IgnorableAppxRemovalError $_ -PackageName $package.PackageName -Provisioned) {
-                            $ignoredRemovalMessages.Add("Windows 10 Appx removal reported error 0x80070002 for $($package.PackageName), but the removal succeeded.")
+                            $ignoredRemovalMessages.Add("Windows reported an error while cleaning up $($package.PackageName), but the package was removed.")
                         }
                         else {
                             Write-Error -ErrorRecord $_ -ErrorAction Continue -ErrorVariable +removalErrors
@@ -347,9 +368,11 @@ function Remove-AppxApp {
                 VerificationWarnings = $verificationWarnings.ToArray()
             }
         } -ArgumentList @($appPattern, $targetUser, $isWindows10)
+        $script:LastAppxRemovalError = ConvertTo-IssueMessage -ErrorRecords $appxRemovalErrors
     }
     catch {
         Write-Error "Unable to remove $app via Appx: $_"
+        $script:LastAppxRemovalError = ConvertTo-IssueMessage -ErrorRecords $_
         return $false
     }
 

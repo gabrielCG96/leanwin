@@ -296,6 +296,7 @@ function Invoke-ApplyFeatures {
         $appRemovalFailuresBefore = $script:AppRemovalFailures
         if ((-not (Invoke-FeatureApply -FeatureId $featureId)) -and ($script:AppRemovalFailures -eq $appRemovalFailuresBefore)) {
             $script:FeatureFailures++
+            Add-ChangeIssue -Name (Get-Translation -Key $featureId -Field 'Label' -Section 'Features')
         }
         Write-Host ""
         $step++
@@ -338,6 +339,7 @@ function Invoke-UndoFeatures {
 
         if (-not (Invoke-FeatureUndo -FeatureId $featureId)) {
             $script:FeatureFailures++
+            Add-ChangeIssue -Name $undoLabel
         }
         Write-Host ""
         $step++
@@ -375,6 +377,7 @@ function Invoke-AllChanges {
     }
     $script:AppRemovalFailures = 0
     $script:FeatureFailures = 0
+    Reset-ChangeIssues
     $script:AppRemovalVerificationUnavailable = $false
     $script:WingetDeferredRemovals = @{}
 
@@ -474,6 +477,7 @@ function Invoke-AllChanges {
             if (-not $restorePointSucceeded) {
                 if ($script:CancelRequested) { return }
                 $script:FeatureFailures++
+                Add-ChangeIssue -Name (Get-Translation -Key 'ApplyCreatingRestorePoint')
             }
             Write-Host ""
         }

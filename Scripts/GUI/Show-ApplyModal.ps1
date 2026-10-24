@@ -68,6 +68,9 @@ function Show-ApplyModal {
     $script:ApplyCompletionIconEl = $applyWindow.FindName('ApplyCompletionIcon')
     $applyRebootPanel = $applyWindow.FindName('ApplyRebootPanel')
     $applyRebootList = $applyWindow.FindName('ApplyRebootList')
+    $applyIssuesPanel = $applyWindow.FindName('ApplyIssuesPanel')
+    $applyIssuesList = $applyWindow.FindName('ApplyIssuesList')
+    $applyOpenLogBtn = $applyWindow.FindName('ApplyOpenLogBtn')
     $applyCloseBtn = $applyWindow.FindName('ApplyCloseBtn')
     $applyKofiBtn = $applyWindow.FindName('ApplyKofiBtn')
     $applyCancelBtn = $applyWindow.FindName('ApplyCancelBtn')
@@ -116,6 +119,22 @@ function Show-ApplyModal {
             Invoke-AllChanges
 
             $failureCount = [int]$script:FeatureFailures + [int]$script:AppRemovalFailures
+
+            # List every failed change with its reason, so nothing depends on the hidden console window
+            foreach ($issue in Get-ChangeIssues) {
+                $line = [System.Windows.Controls.TextBlock]::new()
+                $nameRun = [System.Windows.Documents.Run]::new("$([char]0x2022) $($issue.Name)")
+                $nameRun.FontWeight = 'SemiBold'
+                $line.Inlines.Add($nameRun) | Out-Null
+                $line.Inlines.Add([System.Windows.Documents.Run]::new(" - $($issue.Message)")) | Out-Null
+                $line.FontSize = 12
+                $line.TextWrapping = 'Wrap'
+                $line.Opacity = 0.9
+                $line.Margin = [System.Windows.Thickness]::new(0, 2, 0, 0)
+                $line.SetResourceReference([System.Windows.Controls.TextBlock]::ForegroundProperty, 'AppFgColor')
+                $applyIssuesList.Children.Add($line) | Out-Null
+            }
+            if ($applyIssuesList.Children.Count -gt 0) { $applyIssuesPanel.Visibility = 'Visible' }
             $appRemovalVerificationUnavailable = [bool]$script:AppRemovalVerificationUnavailable
             
             # Restart explorer if requested
@@ -235,13 +254,18 @@ function Show-ApplyModal {
     }) | Out-Null
     
     # Button handlers
+    $applyOpenLogBtn.Add_Click({
+        if ($script:ActiveLogFilePath -and (Test-Path -LiteralPath $script:ActiveLogFilePath)) {
+            Start-Process notepad.exe -ArgumentList "`"$script:ActiveLogFilePath`""
+        }
+    })
     $applyCloseBtn.Add_Click({
         $applyWindow.Close()
     })
 
     $applyKofiBtn.Add_Click({
         if ($script:ApplyModalInErrorState) {
-            Start-Process "https://github.com/Raphire/Win11Debloat/issues/new"
+            Start-Process "https://github.com/gabrielCG96/leanwin/issues/new"
         } else {
             Start-Process "https://ko-fi.com/raphire"
         }

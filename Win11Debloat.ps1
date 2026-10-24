@@ -222,6 +222,7 @@ $script:BubbleHintSchema = Join-Path $schemasPath 'BubbleHint.xaml'
 $script:ImportExportConfigSchema = Join-Path $schemasPath 'ImportExportConfigWindow.xaml'
 $script:RestoreBackupWindowSchema = Join-Path $schemasPath 'RestoreBackupWindow.xaml'
 $script:StartupManagerSchema = Join-Path $schemasPath 'StartupManagerWindow.xaml'
+$script:GuidedSetupSchema = Join-Path $schemasPath 'GuidedSetupWindow.xaml'
 $script:LoadAppsDetailsScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 'Import-AppDetailsFromJson.ps1'
 $script:TestAppInWingetListScriptPath = Join-Path (Join-Path $scriptsPath 'AppRemoval') 'Test-AppInWingetList.ps1'
 $script:ImportLanguageFileScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 'Import-LanguageFile.ps1'
@@ -279,9 +280,11 @@ Write-Host ""
 
 # Log script output to 'Win11Debloat.log' at the specified path
 if ($LogPath -and (Test-Path $LogPath)) {
-    Start-Transcript -Path (Join-Path $LogPath 'Win11Debloat.log') -Append -IncludeInvocationHeader -Force | Out-Null
+    $script:ActiveLogFilePath = Join-Path $LogPath 'Win11Debloat.log'
+    Start-Transcript -Path $script:ActiveLogFilePath -Append -IncludeInvocationHeader -Force | Out-Null
 }
 else {
+    $script:ActiveLogFilePath = $script:DefaultLogPath
     Start-Transcript -Path $script:DefaultLogPath -Append -IncludeInvocationHeader -Force | Out-Null
 }
 
@@ -400,6 +403,7 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 
 # Features functions
 . "$PSScriptRoot/Scripts/Features/Get-CurrentTweakState.ps1"
+. "$PSScriptRoot/Scripts/Features/Change-Issues.ps1"
 . "$PSScriptRoot/Scripts/Features/Invoke-Changes.ps1"
 . "$PSScriptRoot/Scripts/Features/Invoke-SystemRestorePoint.ps1"
 . "$PSScriptRoot/Scripts/Features/Backup-RegistryFeatureSelection.ps1"
@@ -447,6 +451,7 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 . "$PSScriptRoot/Scripts/GUI/Show-AppSelectionWindow.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-RestoreBackupWindow.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-StartupManagerWindow.ps1"
+. "$PSScriptRoot/Scripts/GUI/Show-GuidedSetupWindow.ps1"
 . "$PSScriptRoot/Scripts/GUI/Restore-BackupDialogFeatureLists.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-RestoreBackupDialog.ps1"
 . "$PSScriptRoot/Scripts/GUI/MainWindow-WindowChrome.ps1"

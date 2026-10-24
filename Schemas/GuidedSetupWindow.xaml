@@ -1,0 +1,106 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="%LANG:GuidedTitle%"
+        Width="580"
+        SizeToContent="Height"
+        MaxHeight="720"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="False"
+        ShowInTaskbar="False">
+
+    <Border BorderBrush="{DynamicResource AppBorderColor}"
+            BorderThickness="1"
+            CornerRadius="8"
+            Background="{DynamicResource CardBgColor}"
+            Margin="25">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Opacity="0.15" BlurRadius="20" ShadowDepth="0" Direction="0"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title Bar -->
+            <Grid Grid.Row="0" x:Name="TitleBar" Style="{DynamicResource ModalTitleBarStyle}">
+                <TextBlock x:Name="TitleText" Text="%LANG:GuidedTitle%" Style="{DynamicResource ModalTitleTextStyle}"/>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="520">
+                <StackPanel Margin="24,12,24,16">
+                    <TextBlock Text="%LANG:GuidedIntro%"
+                               TextWrapping="Wrap" FontSize="13" LineHeight="19"
+                               Foreground="{DynamicResource AppFgColor}" Opacity="0.85" Margin="0,0,0,16"/>
+
+                    <!-- Question 1 -->
+                    <TextBlock Text="%LANG:GuidedQuestionUse%" FontSize="14" FontWeight="SemiBold"
+                               Foreground="{DynamicResource AppFgColor}" Margin="0,0,0,6"/>
+                    <ComboBox x:Name="UseCombo" Height="32" Margin="0,0,0,6" AutomationProperties.Name="%LANG:GuidedQuestionUse%">
+                        <ComboBoxItem x:Name="UseAuto" Content="%LANG:GuidedUseAuto%" IsSelected="True"/>
+                        <ComboBoxItem x:Name="UseGamer" Content="%LANG:GuidedUseGamer%"/>
+                        <ComboBoxItem x:Name="UseLaptop" Content="%LANG:GuidedUseLaptop%"/>
+                        <ComboBoxItem x:Name="UsePrivacy" Content="%LANG:GuidedUsePrivacy%"/>
+                        <ComboBoxItem x:Name="UseMinimal" Content="%LANG:GuidedUseMinimal%"/>
+                    </ComboBox>
+                    <TextBlock x:Name="HardwareLine" TextWrapping="Wrap" FontSize="12"
+                               Foreground="{DynamicResource AppFgColor}" Opacity="0.65" Margin="0,0,0,16"/>
+
+                    <!-- Question 2 -->
+                    <TextBlock Text="%LANG:GuidedQuestionExtras%" FontSize="14" FontWeight="SemiBold"
+                               Foreground="{DynamicResource AppFgColor}" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="ExtraSpace" Margin="0,0,0,6" Foreground="{DynamicResource AppFgColor}">
+                        <TextBlock Text="%LANG:GuidedExtraSpace%" TextWrapping="Wrap"/>
+                    </CheckBox>
+                    <CheckBox x:Name="ExtraStartup" Margin="0,0,0,6" Foreground="{DynamicResource AppFgColor}">
+                        <TextBlock Text="%LANG:GuidedExtraStartup%" TextWrapping="Wrap"/>
+                    </CheckBox>
+                    <CheckBox x:Name="ExtraApps" Margin="0,0,0,16" Foreground="{DynamicResource AppFgColor}">
+                        <TextBlock Text="%LANG:GuidedExtraApps%" TextWrapping="Wrap"/>
+                    </CheckBox>
+
+                    <!-- Summary -->
+                    <TextBlock Text="%LANG:GuidedSummaryHeader%" FontSize="14" FontWeight="SemiBold"
+                               Foreground="{DynamicResource AppFgColor}" Margin="0,0,0,6"/>
+                    <Border Background="{DynamicResource AppBgColor}" BorderBrush="{DynamicResource AppBorderColor}"
+                            BorderThickness="1" CornerRadius="6" Padding="12,10">
+                        <StackPanel>
+                            <TextBlock x:Name="SummaryDescription" TextWrapping="Wrap" FontSize="13"
+                                       Foreground="{DynamicResource AppFgColor}" Margin="0,0,0,8"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="150">
+                                <StackPanel x:Name="SummaryList"/>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="%LANG:GuidedReviewNote%" TextWrapping="Wrap" FontSize="12"
+                               Foreground="{DynamicResource AppFgColor}" Opacity="0.65" Margin="0,10,0,0"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Button Panel -->
+            <Border Grid.Row="2"
+                    Background="{DynamicResource AppBgColor}"
+                    BorderBrush="{DynamicResource AppBorderColor}"
+                    BorderThickness="0,1,0,0"
+                    Padding="16,12"
+                    CornerRadius="0,0,8,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="CancelBtn" Grid.Column="0" Content="%LANG:MessageBoxCancel%"
+                            Style="{DynamicResource ModalSecondaryStretchedButtonStyle}"/>
+                    <Button x:Name="SelectBtn" Grid.Column="1" Content="%LANG:GuidedSelect%"
+                            Style="{DynamicResource ModalPrimaryStretchedButtonStyle}"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

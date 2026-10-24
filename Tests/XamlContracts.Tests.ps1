@@ -32,6 +32,7 @@ Describe 'XAML UI contracts' {
             }
             'Show-ImportExportConfigWindow.ps1' = @{ dlg = 'ImportExportConfigWindow.xaml'; owner = 'MainWindow.xaml' }
             'Show-RestoreBackupDialog.ps1' = @{ window = 'RestoreBackupWindow.xaml'; ownerWindow = 'MainWindow.xaml' }
+            'Show-GuidedSetupWindow.ps1' = @{ window = 'GuidedSetupWindow.xaml'; ownerWindow = 'MainWindow.xaml' }
             'Show-StartupManagerWindow.ps1' = @{ window = 'StartupManagerWindow.xaml'; ownerWindow = 'MainWindow.xaml' }
             'Show-Bubble.ps1' = @{ bubblePanel = 'BubbleHint.xaml' }
         }
