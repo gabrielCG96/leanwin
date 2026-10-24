@@ -70,6 +70,9 @@ function Test-FeatureApplied {
 
             return (Test-StoreSearchSuggestionsDisabled -StoreAppsDatabase $storeDbPath)
         }
+        'EnableHighPerformancePower' {
+            return ((powercfg /getactivescheme | Out-String) -match '8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c')
+        }
         'EnableWindowsSandbox' {
             return (Test-WindowsOptionalFeatureEnabled -FeatureName 'Containers-DisposableClientVM')
         }

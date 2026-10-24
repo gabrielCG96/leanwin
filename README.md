@@ -90,6 +90,21 @@ LeanWin ships ready-made profiles in `Config/Profiles/`. Each one is a regular `
 
 Every profile creates a restore point first.
 
+`-ProfileName Auto` detects your hardware and picks the profile for you. Run `-DetectHardware` to see what was detected without changing anything.
+
+## Safety, reports and cleanup
+
+| Command | What it does |
+|---|---|
+| `-WhatIf` | Dry-run: lists everything that would change (including the disk cleanup sizes) without applying it. |
+| `-Report` | Prints memory in use, processes, startup programs, free disk space and boot time before and after the changes. Run it alone after a restart to compare the boot time. |
+| `-DetectHardware` | Shows the detected SSD/HDD, laptop/desktop and GPU and the recommended profile. |
+| `-RestoreBackup Latest` | Undo everything: restores the newest registry backup (or pass the path of a backup file). |
+
+A registry backup is created before any registry tweak, and `-CreateRestorePoint` (on in every profile) adds a system restore point. The registry backup does not cover removed apps, services or the power plan, use the restore point for those.
+
+The disk cleanup tweaks (`-CleanTempFiles`, `-CleanWindowsUpdateCache`, `-EmptyRecycleBin`) are never part of a profile because they cannot be undone. Combine them with `-WhatIf` first.
+
 ## Features
 
 Below is an overview of the key features and functionality offered by Win11Debloat. You can visit the [the wiki](https://github.com/Raphire/Win11Debloat/wiki) for more details.

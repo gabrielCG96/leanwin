@@ -15,6 +15,9 @@ param (
     [switch]$RunSavedSettings,
     [string]$Config,
     [string]$ProfileName,
+    [switch]$Report,
+    [switch]$DetectHardware,
+    [string]$RestoreBackup,
     [string]$Apps,
     [string]$AppRemovalTarget,
     [switch]$RemoveApps,
@@ -27,6 +30,9 @@ param (
     [switch]$EnableWindowsSubsystemForLinux,
     [switch]$DisableTelemetry,
     [switch]$DisableFastStartup,
+    [switch]$CleanTempFiles,
+    [switch]$CleanWindowsUpdateCache,
+    [switch]$EmptyRecycleBin,
     [switch]$DisableSysMain,
     [switch]$EnableHardwareGpuScheduling,
     [switch]$DisableNetworkThrottling,
@@ -215,7 +221,7 @@ $script:LoadAppsDetailsScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 
 $script:TestAppInWingetListScriptPath = Join-Path (Join-Path $scriptsPath 'AppRemoval') 'Test-AppInWingetList.ps1'
 $script:ImportLanguageFileScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 'Import-LanguageFile.ps1'
 
-$script:ControlParams = 'WhatIf', 'Confirm', 'Verbose', 'Debug', 'LogPath', 'Language', 'Silent', 'Sysprep', 'User', 'SkipExplorerRestart', 'SkipRegistryBackup', 'RunDefaults', 'RunDefaultsLite', 'RunSavedSettings', 'Config', 'ProfileName', 'CLI', 'AppRemovalTarget'
+$script:ControlParams = 'WhatIf', 'Confirm', 'Verbose', 'Debug', 'LogPath', 'Language', 'Silent', 'Sysprep', 'User', 'SkipExplorerRestart', 'SkipRegistryBackup', 'RunDefaults', 'RunDefaultsLite', 'RunSavedSettings', 'Config', 'ProfileName', 'Report', 'DetectHardware', 'RestoreBackup', 'CLI', 'AppRemovalTarget'
 
 # Script-level variables for GUI elements
 $script:GuiWindow = $null
@@ -401,6 +407,10 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 . "$PSScriptRoot/Scripts/Features/Telemetry-ScheduledTasks.ps1"
 . "$PSScriptRoot/Scripts/Features/Windows-OptionalFeatures.ps1"
 . "$PSScriptRoot/Scripts/Features/Set-PowerPlan.ps1"
+. "$PSScriptRoot/Scripts/Features/Clear-DiskJunk.ps1"
+. "$PSScriptRoot/Scripts/Features/Get-HardwareInfo.ps1"
+. "$PSScriptRoot/Scripts/Features/Get-SystemSnapshot.ps1"
+. "$PSScriptRoot/Scripts/Features/Restore-LatestRegistryBackup.ps1"
 . "$PSScriptRoot/Scripts/Features/Import-RegistryFile.ps1"
 . "$PSScriptRoot/Scripts/Features/Replace-StartMenu.ps1"
 . "$PSScriptRoot/Scripts/Features/Invoke-RestartExplorer.ps1"
@@ -493,6 +503,44 @@ if ((-not $script:Params.ContainsKey("Apps")) -and $script:Params.ContainsKey("R
     $script:Params.Add('Apps', 'Default')
 }
 
+# Standalone commands that report or restore and then exit, without applying any change
+if ($DetectHardware) {
+    $hardwareInfo = Get-HardwareInfo
+    $recommendation = Get-RecommendedProfile -IsLaptop $hardwareInfo.IsLaptop -HasDiscreteGpu $hardwareInfo.HasDiscreteGpu -SystemDiskType $hardwareInfo.SystemDiskType
+    Write-HardwareRecommendation -Info $hardwareInfo -Recommendation $recommendation
+    Exit 0
+}
+
+if ($RestoreBackup) {
+    $restored = Invoke-CliRegistryRestore -BackupPath $RestoreBackup
+    Exit $(if ($restored) { 0 } else { 1 })
+}
+
+$reportOnlyIgnoredParams = 'Report', 'Silent', 'Language', 'LogPath', 'Verbose', 'Debug'
+if ($Report -and -not @($script:Params.Keys | Where-Object { $reportOnlyIgnoredParams -notcontains $_ }).Count) {
+    $currentSnapshot = Get-SystemSnapshot
+    $lastSnapshot = Get-LastSavedSnapshot
+    if ($lastSnapshot) {
+        Write-SystemReport -Before $lastSnapshot -After $currentSnapshot -BeforeLabel 'Last saved' -AfterLabel 'Now'
+    }
+    else {
+        Write-Host 'No earlier report found, this snapshot is saved as the starting point.'
+    }
+    Write-Host "Report saved to $(Save-SystemSnapshot -Snapshot $currentSnapshot)"
+    Exit 0
+}
+
+# -ProfileName Auto picks the profile that matches this PC
+$script:AutoProfileExtras = @()
+if ($ProfileName -ieq 'Auto') {
+    $hardwareInfo = Get-HardwareInfo
+    $recommendation = Get-RecommendedProfile -IsLaptop $hardwareInfo.IsLaptop -HasDiscreteGpu $hardwareInfo.HasDiscreteGpu -SystemDiskType $hardwareInfo.SystemDiskType
+    Write-Host "Detected profile: $($recommendation.ProfileName)" -ForegroundColor Green
+    foreach ($reason in $recommendation.Reasons) { Write-Host "  - $reason" }
+    $ProfileName = $recommendation.ProfileName
+    $script:AutoProfileExtras = @($recommendation.ExtraFeatureIds)
+}
+
 # Resolve -ProfileName to the matching preset in Config/Profiles, which is then loaded like -Config
 if ($ProfileName) {
     if ($Config) {
@@ -582,6 +630,9 @@ if ((-not $script:Params.Count) -or $RunDefaults -or $RunDefaultsLite -or $RunSa
     elseif ($Config) {
         try {
             Import-ConfigToParams -ConfigPath $Config -CurrentBuild $WinVersion -ExpectedVersion '1.0'
+            foreach ($extraFeatureId in $script:AutoProfileExtras) {
+                Add-Parameter $extraFeatureId $true
+            }
         }
         catch {
             Write-Error "$_"

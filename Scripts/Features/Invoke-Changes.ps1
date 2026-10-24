@@ -82,6 +82,18 @@ function Invoke-FeatureApply {
 
             return (Remove-SelectedApps @('Microsoft.StartExperiencesApp','MicrosoftWindows.Client.WebExperience','Microsoft.WidgetsPlatformRuntime'))
         }
+        'CleanTempFiles' {
+            Write-Host "> $applyText..."
+            return (Clear-TempFiles)
+        }
+        'CleanWindowsUpdateCache' {
+            Write-Host "> $applyText..."
+            return (Clear-WindowsUpdateCache)
+        }
+        'EmptyRecycleBin' {
+            Write-Host "> $applyText..."
+            return (Clear-RecycleBinContents)
+        }
         'EnableHighPerformancePower' {
             Write-Host "> $applyText..."
             return (Set-PowerPlan -Plan 'HighPerformance')
@@ -356,6 +368,11 @@ function Invoke-AllChanges {
         throw "Win11Debloat is running as the SYSTEM account. Use the '-User' or '-Sysprep' parameter to target a specific user."
     }
 
+    # The before/after report needs a real run, a -WhatIf preview changes nothing to compare
+    $reportBefore = $null
+    if ($script:Params.ContainsKey('Report') -and -not $script:Params.ContainsKey('WhatIf')) {
+        $reportBefore = Get-SystemSnapshot
+    }
     $script:AppRemovalFailures = 0
     $script:FeatureFailures = 0
     $script:AppRemovalVerificationUnavailable = $false
@@ -496,6 +513,16 @@ function Invoke-AllChanges {
     if ($script:AppRemovalVerificationUnavailable) {
         Write-Host ""
         Write-Warning "Unable to verify if all apps were uninstalled successfully."
+    }
+
+    # ================================================================
+    # Report: compare the system before and after the changes
+    # ================================================================
+    if ($reportBefore) {
+        $reportAfter = Get-SystemSnapshot
+        Write-SystemReport -Before $reportBefore -After $reportAfter
+        Write-Host 'The boot time only changes after a restart. Run .\Win11Debloat.ps1 -Report after restarting to compare it.'
+        Write-Host "Report saved to $(Save-SystemSnapshot -Snapshot $reportAfter)"
     }
 
 }

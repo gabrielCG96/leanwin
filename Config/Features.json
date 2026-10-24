@@ -1177,6 +1177,48 @@
       "MaxVersion": null
     },
     {
+      "FeatureId": "CleanTempFiles",
+      "Label": "Delete temporary files",
+      "ToolTip": "Deletes temporary files older than one day from your user temp folder and the Windows temp folder. Files that are in use are skipped. This cannot be undone.",
+      "Category": "System",
+      "RegistryKey": null,
+      "ApplyText": "Deleting temporary files",
+      "UndoLabel": null,
+      "ApplyUndoText": null,
+      "RegistryUndoKey": null,
+      "DisableWhenApplied": true,
+      "MinVersion": null,
+      "MaxVersion": null
+    },
+    {
+      "FeatureId": "CleanWindowsUpdateCache",
+      "Label": "Clean the Windows Update download cache",
+      "ToolTip": "Deletes the installation files that Windows Update already downloaded. Windows downloads again whatever it still needs. The Windows Update and BITS services are stopped briefly during the cleanup. This cannot be undone.",
+      "Category": "System",
+      "RegistryKey": null,
+      "ApplyText": "Cleaning the Windows Update download cache",
+      "UndoLabel": null,
+      "ApplyUndoText": null,
+      "RegistryUndoKey": null,
+      "DisableWhenApplied": true,
+      "MinVersion": null,
+      "MaxVersion": null
+    },
+    {
+      "FeatureId": "EmptyRecycleBin",
+      "Label": "Empty the Recycle Bin",
+      "ToolTip": "Permanently deletes everything in the Recycle Bin of every drive. Check it first, the files cannot be recovered afterwards.",
+      "Category": "System",
+      "RegistryKey": null,
+      "ApplyText": "Emptying the Recycle Bin",
+      "UndoLabel": null,
+      "ApplyUndoText": null,
+      "RegistryUndoKey": null,
+      "DisableWhenApplied": true,
+      "MinVersion": null,
+      "MaxVersion": null
+    },
+    {
       "FeatureId": "DisableBitlockerAutoEncryption",
       "Label": "Disable BitLocker automatic device encryption",
       "ToolTip": "For devices that support it, Windows 11 automatically enables BitLocker device encryption. Disabling this will turn off automatic encryption of the device, but you can still manually enable BitLocker encryption if desired. Drives that are already encrypted with BitLocker will remain encrypted when this setting is applied.",

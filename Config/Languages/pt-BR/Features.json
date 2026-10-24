@@ -392,6 +392,21 @@
       "UndoLabel": "Usar o plano de energia Equilibrado",
       "ApplyUndoText": "Ativando o plano de energia Equilibrado"
     },
+    "CleanTempFiles": {
+      "Label": "Excluir arquivos temporários",
+      "ToolTip": "Exclui arquivos temporários com mais de um dia da pasta temporária do usuário e da pasta temporária do Windows. Arquivos em uso são ignorados. Não é possível desfazer.",
+      "ApplyText": "Excluindo arquivos temporários"
+    },
+    "CleanWindowsUpdateCache": {
+      "Label": "Limpar o cache de download do Windows Update",
+      "ToolTip": "Exclui os arquivos de instalação que o Windows Update já baixou. O Windows baixa novamente o que ainda precisar. Os serviços Windows Update e BITS são interrompidos rapidamente durante a limpeza. Não é possível desfazer.",
+      "ApplyText": "Limpando o cache de download do Windows Update"
+    },
+    "EmptyRecycleBin": {
+      "Label": "Esvaziar a Lixeira",
+      "ToolTip": "Exclui permanentemente tudo o que está na Lixeira de todas as unidades. Confira antes, pois os arquivos não poderão ser recuperados.",
+      "ApplyText": "Esvaziando a Lixeira"
+    },
     "DisableBitlockerAutoEncryption": {
       "Label": "Desabilitar criptografia automática de dispositivos do BitLocker",
       "ToolTip": "Para dispositivos que suportam, o Windows 11 habilita automaticamente a criptografia de dispositivos BitLocker. Desabilitar isso desligará a criptografia automática do dispositivo, mas você ainda pode habilitar manualmente a criptografia BitLocker se desejar. Unidades que já estão criptografadas com BitLocker permanecerão criptografadas quando esta configuração for aplicada.",
