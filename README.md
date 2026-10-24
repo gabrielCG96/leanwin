@@ -105,6 +105,28 @@ A registry backup is created before any registry tweak, and `-CreateRestorePoint
 
 The disk cleanup tweaks (`-CleanTempFiles`, `-CleanWindowsUpdateCache`, `-EmptyRecycleBin`) are never part of a profile because they cannot be undone. Combine them with `-WhatIf` first.
 
+## Graphical interface
+
+- **Profiles** appear in the *Presets* menu of the Tweaks tab. They select tweaks only, the app list stays as you left it.
+- The **⋮ menu** has *Startup programs*, *System report* and *Detect hardware* next to *Restore backup*.
+- **Startup programs** lists everything that starts with Windows and lets you switch each one off or on. Nothing is deleted: the state is stored the same way Task Manager does, so it can always be switched back.
+
+## Startup programs and app list updates (command line)
+
+| Command | What it does |
+|---|---|
+| `-ListStartup` | Lists the startup programs and whether they are enabled. |
+| `-DisableStartupItem "Name"` / `-EnableStartupItem "Name"` | Switches one startup program off or on. Combine with `-WhatIf` to preview. |
+| `-UpdateAppList` | Downloads the latest `Config/Apps.json` from this repository, validates it, shows what changed and asks before using it. |
+
+The downloaded app list is only ever used when you ask for it, from one fixed HTTPS address, and only after strict checks (format version, allowed values, package identifiers and presets). It is stored in your user data folder and the app list shipped with the script wins again as soon as it is newer. Delete `Apps.json` from `%LOCALAPPDATA%\Win11Debloat` to go back to the shipped list. Apps that are new in the downloaded list show their package name in the interface until a translation ships with the script.
+
+## Testing in Windows Sandbox
+
+`Tests/Sandbox/Run-SandboxTests.ps1` starts Windows Sandbox (a disposable copy of Windows), applies every registry tweak and every profile inside it, undoes each tweak with `-RestoreBackup Latest` and reports what failed. Nothing touches your PC. It needs the *Windows Sandbox* feature (`Enable-WindowsOptionalFeature -Online -FeatureName Containers-DisposableClientVM`).
+
+The unit tests run with `.\Scripts\Run-Tests.ps1 -Bootstrap` (installs Pester 5 for your user).
+
 ## Features
 
 Below is an overview of the key features and functionality offered by Win11Debloat. You can visit the [the wiki](https://github.com/Raphire/Win11Debloat/wiki) for more details.

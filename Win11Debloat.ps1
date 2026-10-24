@@ -18,6 +18,10 @@ param (
     [switch]$Report,
     [switch]$DetectHardware,
     [string]$RestoreBackup,
+    [switch]$ListStartup,
+    [string]$DisableStartupItem,
+    [string]$EnableStartupItem,
+    [switch]$UpdateAppList,
     [string]$Apps,
     [string]$AppRemovalTarget,
     [switch]$RemoveApps,
@@ -217,11 +221,12 @@ $script:SharedStylesSchema = Join-Path $schemasPath 'SharedStyles.xaml'
 $script:BubbleHintSchema = Join-Path $schemasPath 'BubbleHint.xaml'
 $script:ImportExportConfigSchema = Join-Path $schemasPath 'ImportExportConfigWindow.xaml'
 $script:RestoreBackupWindowSchema = Join-Path $schemasPath 'RestoreBackupWindow.xaml'
+$script:StartupManagerSchema = Join-Path $schemasPath 'StartupManagerWindow.xaml'
 $script:LoadAppsDetailsScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 'Import-AppDetailsFromJson.ps1'
 $script:TestAppInWingetListScriptPath = Join-Path (Join-Path $scriptsPath 'AppRemoval') 'Test-AppInWingetList.ps1'
 $script:ImportLanguageFileScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 'Import-LanguageFile.ps1'
 
-$script:ControlParams = 'WhatIf', 'Confirm', 'Verbose', 'Debug', 'LogPath', 'Language', 'Silent', 'Sysprep', 'User', 'SkipExplorerRestart', 'SkipRegistryBackup', 'RunDefaults', 'RunDefaultsLite', 'RunSavedSettings', 'Config', 'ProfileName', 'Report', 'DetectHardware', 'RestoreBackup', 'CLI', 'AppRemovalTarget'
+$script:ControlParams = 'WhatIf', 'Confirm', 'Verbose', 'Debug', 'LogPath', 'Language', 'Silent', 'Sysprep', 'User', 'SkipExplorerRestart', 'SkipRegistryBackup', 'RunDefaults', 'RunDefaultsLite', 'RunSavedSettings', 'Config', 'ProfileName', 'Report', 'DetectHardware', 'RestoreBackup', 'ListStartup', 'DisableStartupItem', 'EnableStartupItem', 'UpdateAppList', 'CLI', 'AppRemovalTarget'
 
 # Script-level variables for GUI elements
 $script:GuiWindow = $null
@@ -411,6 +416,7 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 . "$PSScriptRoot/Scripts/Features/Get-HardwareInfo.ps1"
 . "$PSScriptRoot/Scripts/Features/Get-SystemSnapshot.ps1"
 . "$PSScriptRoot/Scripts/Features/Restore-LatestRegistryBackup.ps1"
+. "$PSScriptRoot/Scripts/Features/Startup-Manager.ps1"
 . "$PSScriptRoot/Scripts/Features/Import-RegistryFile.ps1"
 . "$PSScriptRoot/Scripts/Features/Replace-StartMenu.ps1"
 . "$PSScriptRoot/Scripts/Features/Invoke-RestartExplorer.ps1"
@@ -420,6 +426,7 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 . "$PSScriptRoot/Scripts/FileIO/Import-LanguageFile.ps1"
 . "$PSScriptRoot/Scripts/FileIO/Save-ToFile.ps1"
 . "$PSScriptRoot/Scripts/FileIO/Save-Settings.ps1"
+. "$PSScriptRoot/Scripts/FileIO/Update-AppList.ps1"
 . "$PSScriptRoot/Scripts/FileIO/Import-Settings.ps1"
 . "$PSScriptRoot/Scripts/FileIO/Get-ValidatedAppList.ps1"
 . "$PSScriptRoot/Scripts/FileIO/Import-AppsFromFile.ps1"
@@ -439,6 +446,7 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 . "$PSScriptRoot/Scripts/GUI/Show-ApplyModal.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-AppSelectionWindow.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-RestoreBackupWindow.ps1"
+. "$PSScriptRoot/Scripts/GUI/Show-StartupManagerWindow.ps1"
 . "$PSScriptRoot/Scripts/GUI/Restore-BackupDialogFeatureLists.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-RestoreBackupDialog.ps1"
 . "$PSScriptRoot/Scripts/GUI/MainWindow-WindowChrome.ps1"
@@ -446,6 +454,7 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 . "$PSScriptRoot/Scripts/GUI/MainWindow-TweaksBuilder.ps1"
 . "$PSScriptRoot/Scripts/GUI/MainWindow-Navigation.ps1"
 . "$PSScriptRoot/Scripts/GUI/MainWindow-Deployment.ps1"
+. "$PSScriptRoot/Scripts/GUI/MainWindow-Profiles.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-MainWindow.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-AboutDialog.ps1"
 . "$PSScriptRoot/Scripts/GUI/Show-Bubble.ps1"
@@ -504,6 +513,19 @@ if ((-not $script:Params.ContainsKey("Apps")) -and $script:Params.ContainsKey("R
 }
 
 # Standalone commands that report or restore and then exit, without applying any change
+# Use the app list downloaded with -UpdateAppList when it is newer than the one shipped with the script
+if (-not $UpdateAppList) {
+    Use-UpdatedAppList
+}
+
+if ($UpdateAppList) {
+    Exit $(if (Update-AppListFromRepository) { 0 } else { 1 })
+}
+
+if ($ListStartup -or $DisableStartupItem -or $EnableStartupItem) {
+    $startupOk = Invoke-CliStartupManager -List:$ListStartup -DisableName $DisableStartupItem -EnableName $EnableStartupItem
+    Exit $(if ($startupOk) { 0 } else { 1 })
+}
 if ($DetectHardware) {
     $hardwareInfo = Get-HardwareInfo
     $recommendation = Get-RecommendedProfile -IsLaptop $hardwareInfo.IsLaptop -HasDiscreteGpu $hardwareInfo.HasDiscreteGpu -SystemDiskType $hardwareInfo.SystemDiskType

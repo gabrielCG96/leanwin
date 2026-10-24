@@ -400,6 +400,21 @@
                                                 <TextBlock Text="&#xe81c;" FontFamily="{DynamicResource AppIconFontFamily}" FontSize="16" Foreground="{DynamicResource AppFgColor}"/>
                                             </MenuItem.Icon>
                                         </MenuItem>
+                                        <MenuItem x:Name="StartupManagerBtn" Header="%LANG:MenuStartupManager%" AutomationProperties.Name="%LANG:MenuStartupManagerTooltip%">
+                                            <MenuItem.Icon>
+                                                <TextBlock Text="&#xE7E8;" FontFamily="{DynamicResource AppIconFontFamily}" FontSize="16" Foreground="{DynamicResource AppFgColor}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem x:Name="SystemReportBtn" Header="%LANG:MenuSystemReport%" AutomationProperties.Name="%LANG:MenuSystemReportTooltip%">
+                                            <MenuItem.Icon>
+                                                <TextBlock Text="&#xE9D9;" FontFamily="{DynamicResource AppIconFontFamily}" FontSize="16" Foreground="{DynamicResource AppFgColor}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem x:Name="DetectHardwareBtn" Header="%LANG:MenuDetectHardware%" AutomationProperties.Name="%LANG:MenuDetectHardwareTooltip%">
+                                            <MenuItem.Icon>
+                                                <TextBlock Text="&#xE7F4;" FontFamily="{DynamicResource AppIconFontFamily}" FontSize="16" Foreground="{DynamicResource AppFgColor}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                         <Separator />
                                         <MenuItem x:Name="MenuDocumentation" Header="%LANG:MenuDocumentation%" AutomationProperties.Name="%LANG:MenuDocumentation%">
                                             <MenuItem.Icon>
@@ -806,6 +821,9 @@
                                                     <Separator Margin="4,6" Background="{DynamicResource AppBorderColor}"/>
                                                     <CheckBox x:Name="PresetPrivacyTweaksBtn" Content="%LANG:TweaksPresetPrivacy%" IsThreeState="True" ToolTip="%LANG:TweaksPresetPrivacyTooltip%" Foreground="{DynamicResource AppFgColor}" Style="{DynamicResource PresetCheckBoxStyle}" AutomationProperties.Name="%LANG:TweaksPresetPrivacyAutomationName%"/>
                                                     <CheckBox x:Name="PresetAITweaksBtn" Content="%LANG:TweaksPresetAI%" IsThreeState="True" ToolTip="%LANG:TweaksPresetAITooltip%" Foreground="{DynamicResource AppFgColor}" Style="{DynamicResource PresetCheckBoxStyle}" AutomationProperties.Name="%LANG:TweaksPresetAIAutomationName%"/>
+                                                    <Separator x:Name="ProfilePresetsSeparator" Margin="4,6" Background="{DynamicResource AppBorderColor}"/>
+                                                    <TextBlock x:Name="ProfilePresetsHeader" Text="%LANG:TweaksPresetProfilesHeader%" FontSize="12" Opacity="0.7" Foreground="{DynamicResource AppFgColor}" Margin="8,2,0,4"/>
+                                                    <StackPanel x:Name="ProfilePresetsPanel"/>
                                                 </StackPanel>
                                             </Border>
                                         </Popup>

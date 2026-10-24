@@ -385,6 +385,7 @@ function Update-TweakPresetStates {
         }
         Set-TweakPresetCheckBoxState -PresetCheckBox $presetPrivacyTweaksBtn -PresetMap $script:PrivacyTweakPresetMap
         Set-TweakPresetCheckBoxState -PresetCheckBox $presetAITweaksBtn -PresetMap $script:AITweakPresetMap
+        Update-ProfilePresetStates
     }
     finally {
         $script:UpdatingTweakPresets = $false

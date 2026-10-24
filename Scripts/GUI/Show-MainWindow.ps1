@@ -36,6 +36,9 @@ function Show-MainWindow {
     $importConfigBtn = $window.FindName('ImportConfigBtn')
     $exportConfigBtn = $window.FindName('ExportConfigBtn')
     $restoreBackupBtn = $window.FindName('RestoreBackupBtn')
+    $startupManagerBtn = $window.FindName('StartupManagerBtn')
+    $systemReportBtn = $window.FindName('SystemReportBtn')
+    $detectHardwareBtn = $window.FindName('DetectHardwareBtn')
     $homeContentPanel = $window.FindName('HomeContentPanel')
     $contentGrid = $window.FindName('ContentGrid')
     $maxContentWidth = 1600.0
@@ -217,6 +220,76 @@ function Show-MainWindow {
         })
     }
 
+    # ---- Startup programs ----
+    if ($startupManagerBtn) {
+        $startupManagerBtn.Add_Click({
+            try { Show-StartupManagerWindow -Owner $window }
+            catch {
+                Write-Warning "Startup programs action failed: $($_.Exception.Message)"
+                Show-MessageBox -Owner $window -Message $_.Exception.Message -Title (Get-Translation -Key 'ErrorTitle') -Button 'OK' -Icon 'Error' | Out-Null
+            }
+        })
+    }
+
+    # ---- System report: compares the system now with the last saved snapshot ----
+    if ($systemReportBtn) {
+        $systemReportBtn.Add_Click({
+            try {
+                $current = Get-SystemSnapshot
+                $last = Get-LastSavedSnapshot
+                if ($last) {
+                    $lines = @(Get-Translation -Key 'SystemReportHeader' -FormatArgs @(([datetime]$last.CapturedAt).ToString('g')))
+                    $lines += ''
+                    foreach ($row in Get-SystemReportRows -Before $last -After $current) {
+                        $rowName = Get-Translation -Key "SystemReportRow_$($row.Key)"
+                        $change = if ($null -eq $row.Delta) { '-' } elseif ($row.Delta -gt 0) { "+$($row.Delta)" } else { "$($row.Delta)" }
+                        $lines += "${rowName}: $($row.Before) > $($row.After) ($change)"
+                    }
+                    $lines += ''
+                    $lines += Get-Translation -Key 'SystemReportBootNote'
+                    $message = $lines -join [Environment]::NewLine
+                }
+                else {
+                    $message = Get-Translation -Key 'SystemReportFirstRun'
+                }
+                Save-SystemSnapshot -Snapshot $current | Out-Null
+                Show-MessageBox -Owner $window -Message $message -Title (Get-Translation -Key 'SystemReportTitle') -Button 'OK' -Icon 'Information' | Out-Null
+            }
+            catch {
+                Write-Warning "System report failed: $($_.Exception.Message)"
+                Show-MessageBox -Owner $window -Message $_.Exception.Message -Title (Get-Translation -Key 'ErrorTitle') -Button 'OK' -Icon 'Error' | Out-Null
+            }
+        })
+    }
+
+    # ---- Detect hardware and offer the matching profile ----
+    if ($detectHardwareBtn) {
+        $detectHardwareBtn.Add_Click({
+            try {
+                $hardwareInfo = Get-HardwareInfo
+                $recommendation = Get-RecommendedProfile -IsLaptop $hardwareInfo.IsLaptop -HasDiscreteGpu $hardwareInfo.HasDiscreteGpu -SystemDiskType $hardwareInfo.SystemDiskType
+                $deviceType = Get-Translation -Key $(if ($hardwareInfo.IsLaptop) { 'HardwareDeviceLaptop' } else { 'HardwareDeviceDesktop' })
+                $gpuText = if (@($hardwareInfo.Gpus).Count -gt 0) { @($hardwareInfo.Gpus) -join ', ' } else { '-' }
+                $ramText = if ($hardwareInfo.TotalRamGB) { "$($hardwareInfo.TotalRamGB) GB" } else { '-' }
+                $profileLabel = Get-Translation -Key "ProfileName_$($recommendation.ProfileName)"
+                if ($profileLabel -eq "ProfileName_$($recommendation.ProfileName)") { $profileLabel = $recommendation.ProfileName }
+                $message = Get-Translation -Key 'HardwareSummary' -FormatArgs @($hardwareInfo.ComputerModel, $deviceType, $hardwareInfo.SystemDiskType, $gpuText, $ramText, $profileLabel)
+                $answer = Show-MessageBox -Owner $window -Message $message -Title (Get-Translation -Key 'HardwareTitle') -Button 'YesNo' -Icon 'Question'
+                if ($answer -eq 'Yes') {
+                    Select-ProfilePreset -Name $recommendation.ProfileName
+                    foreach ($extraFeatureId in $recommendation.ExtraFeatureIds) {
+                        $extraControlName = $script:UiControlMappings.Keys | Where-Object { $script:UiControlMappings[$_].FeatureId -eq $extraFeatureId } | Select-Object -First 1
+                        $extraControl = if ($extraControlName) { $window.FindName($extraControlName) } else { $null }
+                        if ($extraControl -is [System.Windows.Controls.CheckBox]) { $extraControl.IsChecked = $true }
+                    }
+                }
+            }
+            catch {
+                Write-Warning "Hardware detection failed: $($_.Exception.Message)"
+                Show-MessageBox -Owner $window -Message $_.Exception.Message -Title (Get-Translation -Key 'ErrorTitle') -Button 'OK' -Icon 'Error' | Out-Null
+            }
+        })
+    }
     # ---- Script-level state initialization ----
     $script:MainWindowLastSelectedCheckbox = $null
     $script:IsLoadingApps = $false
@@ -763,6 +836,7 @@ function Show-MainWindow {
             $script:SavedAppIds = Get-SavedAppIdsFromSettingsJson -SettingsJson $lastUsedSettingsJson
 
             Initialize-TweakPresetSources -Window $window -DefaultSettingsJson $defaultsJson -LastUsedSettingsJson $lastUsedSettingsJson
+            Initialize-ProfilePresets -Window $window
             Register-TweakPresetControlStateHandlers -Window $window
             Update-TweakPresetStates -Window $window
 

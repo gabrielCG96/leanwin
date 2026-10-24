@@ -68,7 +68,47 @@ function Get-SystemSnapshot {
 
 <#
     .SYNOPSIS
-    Prints a table comparing two snapshots. A lower value is better for every row except free disk space.
+    Compares two snapshots row by row.
+
+    .OUTPUTS
+    PSCustomObject per row with Key, Name, Before, After, Delta (null when a value is missing) and Improved (null when nothing changed).
+    A lower value is better for every row except free disk space.
+#>
+function Get-SystemReportRows {
+    param (
+        [Parameter(Mandatory)]
+        $Before,
+        [Parameter(Mandatory)]
+        $After
+    )
+
+    $definitions = @(
+        @{ Key = 'MemoryUsedMB'; Name = 'Memory in use (MB)'; HigherIsBetter = $false },
+        @{ Key = 'ProcessCount'; Name = 'Running processes'; HigherIsBetter = $false },
+        @{ Key = 'StartupItems'; Name = 'Startup programs'; HigherIsBetter = $false },
+        @{ Key = 'FreeDiskGB'; Name = 'Free disk space (GB)'; HigherIsBetter = $true },
+        @{ Key = 'BootDurationSecs'; Name = 'Last boot time (s)'; HigherIsBetter = $false }
+    )
+
+    foreach ($definition in $definitions) {
+        $b = $Before.($definition.Key)
+        $a = $After.($definition.Key)
+        $delta = $null
+        $improved = $null
+        if ($null -ne $b -and $null -ne $a) {
+            $delta = [math]::Round(($a - $b), 1)
+            if ($delta -ne 0) {
+                $improved = if ($definition.HigherIsBetter) { $delta -gt 0 } else { $delta -lt 0 }
+            }
+        }
+
+        [PSCustomObject]@{ Key = $definition.Key; Name = $definition.Name; Before = $b; After = $a; Delta = $delta; Improved = $improved }
+    }
+}
+
+<#
+    .SYNOPSIS
+    Prints a table comparing two snapshots. Rows that improved are green, rows that got worse are yellow.
 #>
 function Write-SystemReport {
     param (
@@ -80,32 +120,17 @@ function Write-SystemReport {
         [string]$AfterLabel = 'After'
     )
 
-    $rows = @(
-        @{ Name = 'Memory in use (MB)'; Key = 'MemoryUsedMB'; HigherIsBetter = $false },
-        @{ Name = 'Running processes'; Key = 'ProcessCount'; HigherIsBetter = $false },
-        @{ Name = 'Startup programs'; Key = 'StartupItems'; HigherIsBetter = $false },
-        @{ Name = 'Free disk space (GB)'; Key = 'FreeDiskGB'; HigherIsBetter = $true },
-        @{ Name = 'Last boot time (s)'; Key = 'BootDurationSecs'; HigherIsBetter = $false }
-    )
-
     Write-Host ""
     Write-Host ("{0,-24}{1,12}{2,12}{3,12}" -f 'System report', $BeforeLabel, $AfterLabel, 'Change') -ForegroundColor Cyan
-    foreach ($row in $rows) {
-        $b = $Before.($row.Key)
-        $a = $After.($row.Key)
-        if ($null -eq $b -or $null -eq $a) {
-            Write-Host ("{0,-24}{1,12}{2,12}{3,12}" -f $row.Name, "$b", "$a", 'n/a')
+    foreach ($row in Get-SystemReportRows -Before $Before -After $After) {
+        if ($null -eq $row.Delta) {
+            Write-Host ("{0,-24}{1,12}{2,12}{3,12}" -f $row.Name, "$($row.Before)", "$($row.After)", 'n/a')
             continue
         }
 
-        $delta = [math]::Round(($a - $b), 1)
-        $color = 'Gray'
-        if ($delta -ne 0) {
-            $improved = if ($row.HigherIsBetter) { $delta -gt 0 } else { $delta -lt 0 }
-            $color = if ($improved) { 'Green' } else { 'Yellow' }
-        }
-        $sign = if ($delta -gt 0) { '+' } else { '' }
-        Write-Host ("{0,-24}{1,12}{2,12}{3,12}" -f $row.Name, $b, $a, "$sign$delta") -ForegroundColor $color
+        $color = if ($null -eq $row.Improved) { 'Gray' } elseif ($row.Improved) { 'Green' } else { 'Yellow' }
+        $sign = if ($row.Delta -gt 0) { '+' } else { '' }
+        Write-Host ("{0,-24}{1,12}{2,12}{3,12}" -f $row.Name, $row.Before, $row.After, "$sign$($row.Delta)") -ForegroundColor $color
     }
     Write-Host ""
 }

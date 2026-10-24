@@ -18,6 +18,7 @@ Describe 'XAML UI contracts' {
             'Show-MainWindow.ps1' = @{ window = 'MainWindow.xaml' }
             'MainWindow-AppSelection.ps1' = @{ window = 'MainWindow.xaml'; w = 'MainWindow.xaml' }
             'MainWindow-Deployment.ps1' = @{ window = 'MainWindow.xaml' }
+            'MainWindow-Profiles.ps1' = @{ window = 'MainWindow.xaml' }
             'MainWindow-Localization.ps1' = @{ window = 'MainWindow.xaml' }
             'MainWindow-Navigation.ps1' = @{ window = 'MainWindow.xaml' }
             'MainWindow-TweaksBuilder.ps1' = @{ window = 'MainWindow.xaml' }
@@ -31,6 +32,7 @@ Describe 'XAML UI contracts' {
             }
             'Show-ImportExportConfigWindow.ps1' = @{ dlg = 'ImportExportConfigWindow.xaml'; owner = 'MainWindow.xaml' }
             'Show-RestoreBackupDialog.ps1' = @{ window = 'RestoreBackupWindow.xaml'; ownerWindow = 'MainWindow.xaml' }
+            'Show-StartupManagerWindow.ps1' = @{ window = 'StartupManagerWindow.xaml'; ownerWindow = 'MainWindow.xaml' }
             'Show-Bubble.ps1' = @{ bubblePanel = 'BubbleHint.xaml' }
         }
         $schemaNames = @{}
