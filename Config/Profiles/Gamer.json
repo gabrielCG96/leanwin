@@ -1,0 +1,164 @@
+{
+    "Version": "1.0",
+    "Description": "Maximum performance for gaming: GPU scheduling, no network throttling, high performance power plan and no background clutter. Keeps the Xbox apps.",
+    "Apps": [
+        "Clipchamp.Clipchamp",
+        "Microsoft.3DBuilder",
+        "Microsoft.549981C3F5F10",
+        "Microsoft.BingFinance",
+        "Microsoft.BingFoodAndDrink",
+        "Microsoft.BingHealthAndFitness",
+        "Microsoft.BingNews",
+        "Microsoft.BingSports",
+        "Microsoft.BingTranslator",
+        "Microsoft.BingTravel",
+        "Microsoft.BingWeather",
+        "XP9CXNGPPJ97XX",
+        "Microsoft.Windows.AIHub",
+        "Microsoft.PCManager",
+        "Microsoft.Getstarted",
+        "Microsoft.Messaging",
+        "Microsoft.Microsoft3DViewer",
+        "Microsoft.MicrosoftJournal",
+        "Microsoft.MicrosoftOfficeHub",
+        "Microsoft.MicrosoftPowerBIForWindows",
+        "Microsoft.MicrosoftSolitaireCollection",
+        "Microsoft.MicrosoftStickyNotes",
+        "Microsoft.MixedReality.Portal",
+        "Microsoft.NetworkSpeedTest",
+        "Microsoft.Office.OneNote",
+        "Microsoft.Office.Sway",
+        "Microsoft.OneConnect",
+        "Microsoft.Print3D",
+        "Microsoft.PowerAutomateDesktop",
+        "Microsoft.SkypeApp",
+        "Microsoft.Todos",
+        "Microsoft.Windows.DevHome",
+        "Microsoft.WindowsAlarms",
+        "Microsoft.WindowsFeedbackHub",
+        "Microsoft.WindowsMaps",
+        "Microsoft.WindowsSoundRecorder",
+        "Microsoft.XboxApp",
+        "Microsoft.ZuneVideo",
+        "MicrosoftCorporationII.MicrosoftFamily",
+        "MicrosoftCorporationII.QuickAssist",
+        "MicrosoftTeams",
+        "MSTeams",
+        "ACGMediaPlayer",
+        "ActiproSoftwareLLC",
+        "AdobeSystemsIncorporated.AdobePhotoshopExpress",
+        "Amazon.com.Amazon",
+        "AmazonVideo.PrimeVideo",
+        "Asphalt8Airborne",
+        "AutodeskSketchBook",
+        "CaesarsSlotsFreeCasino",
+        "COOKINGFEVER",
+        "CyberLinkMediaSuiteEssentials",
+        "DisneyMagicKingdoms",
+        "Disney.37853FC22B2CE",
+        "DrawboardPDF",
+        "Duolingo-LearnLanguagesforFree",
+        "FACEBOOK.FACEBOOK",
+        "FarmVille2CountryEscape",
+        "Flipboard",
+        "HiddenCity",
+        "HULULLC.HULUPLUS",
+        "iHeartRadio",
+        "Facebook.Instagram",
+        "king.com.BubbleWitch3Saga",
+        "king.com.CandyCrushSaga",
+        "king.com.CandyCrushSodaSaga",
+        "LinkedInforWindows",
+        "MarchofEmpires",
+        "4DF9E0F8.Netflix",
+        "NYTCrossword",
+        "OneCalendar",
+        "PandoraMediaInc",
+        "PhototasticCollage",
+        "PicsArt-PhotoStudio",
+        "PolarrPhotoEditorAcademicEdition",
+        "flaregamesGmbH.RoyalRevolt",
+        "Sidia.LiveWallpaper",
+        "SlingTV",
+        "SpotifyAB.SpotifyMusic",
+        "BytedancePte.Ltd.TikTok",
+        "TuneInRadio",
+        "WinZipUniversal"
+    ],
+    "Tweaks": [
+        {
+            "Name": "DisableTelemetry",
+            "Value": true
+        },
+        {
+            "Name": "DisableSuggestions",
+            "Value": true
+        },
+        {
+            "Name": "DisableLockscreenTips",
+            "Value": true
+        },
+        {
+            "Name": "DisableEdgeAds",
+            "Value": true
+        },
+        {
+            "Name": "DisableBing",
+            "Value": true
+        },
+        {
+            "Name": "DisableWidgets",
+            "Value": true
+        },
+        {
+            "Name": "HideChat",
+            "Value": true
+        },
+        {
+            "Name": "EnableHighPerformancePower",
+            "Value": true
+        },
+        {
+            "Name": "EnableHardwareGpuScheduling",
+            "Value": true
+        },
+        {
+            "Name": "DisableNetworkThrottling",
+            "Value": true
+        },
+        {
+            "Name": "DisableMouseAcceleration",
+            "Value": true
+        },
+        {
+            "Name": "DisableStickyKeys",
+            "Value": true
+        },
+        {
+            "Name": "DisableDeliveryOptimization",
+            "Value": true
+        },
+        {
+            "Name": "DisableBackgroundApps",
+            "Value": true
+        },
+        {
+            "Name": "DisableStartupDelay",
+            "Value": true
+        },
+        {
+            "Name": "DisableDVR",
+            "Value": true
+        },
+        {
+            "Name": "ShowKnownFileExt",
+            "Value": true
+        }
+    ],
+    "Deployment": [
+        {
+            "Name": "CreateRestorePoint",
+            "Value": true
+        }
+    ]
+}

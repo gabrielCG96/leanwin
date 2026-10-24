@@ -82,6 +82,10 @@ function Invoke-FeatureApply {
 
             return (Remove-SelectedApps @('Microsoft.StartExperiencesApp','MicrosoftWindows.Client.WebExperience','Microsoft.WidgetsPlatformRuntime'))
         }
+        'EnableHighPerformancePower' {
+            Write-Host "> $applyText..."
+            return (Set-PowerPlan -Plan 'HighPerformance')
+        }
         'EnableWindowsSandbox' {
             Write-Host "> $applyText..."
             return (Enable-WindowsFeature "Containers-DisposableClientVM")
@@ -196,6 +200,10 @@ function Invoke-FeatureUndo {
                 }
                 Write-Warning "Unable to re-enable Microsoft Store search suggestions because the Store database for user $(Get-UserName) could not be resolved."
                 return $false
+            }
+            'EnableHighPerformancePower' {
+                Write-Host "> $undoText..."
+                return (Set-PowerPlan -Plan 'Balanced')
             }
             'EnableWindowsSandbox' {
                 Write-Host "> $undoText..."

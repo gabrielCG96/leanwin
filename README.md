@@ -72,6 +72,24 @@ This method supports command-line parameters to customize the behaviour of the s
   This method supports command-line parameters to customize the behaviour of the script. Please click [here](https://github.com/Raphire/Win11Debloat/wiki/Command%E2%80%90line-Interface#parameters) for more information.
 </details>
 
+## Profiles
+
+LeanWin ships ready-made profiles in `Config/Profiles/`. Each one is a regular `-Config` file, so you can copy and edit them.
+
+| Profile | Goal |
+|---|---|
+| `Gamer` | GPU scheduling, no network throttling, High performance power plan, no background clutter. Keeps the Xbox apps. |
+| `Laptop` | Battery friendly: no background apps, fewer visual effects, Balanced power plan. |
+| `Privacy` | Telemetry, ads, location and AI features disabled. |
+| `Minimal` | Only low-risk tweaks, no app removal. |
+
+```PowerShell
+.\Win11Debloat.ps1 -ProfileName Gamer
+.\Win11Debloat.ps1 -ProfileName Laptop -WhatIf   # preview without changing anything
+```
+
+Every profile creates a restore point first.
+
 ## Features
 
 Below is an overview of the key features and functionality offered by Win11Debloat. You can visit the [the wiki](https://github.com/Raphire/Win11Debloat/wiki) for more details.

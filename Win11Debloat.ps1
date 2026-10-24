@@ -14,6 +14,7 @@ param (
     [switch]$RunDefaultsLite,
     [switch]$RunSavedSettings,
     [string]$Config,
+    [string]$ProfileName,
     [string]$Apps,
     [string]$AppRemovalTarget,
     [switch]$RemoveApps,
@@ -26,6 +27,12 @@ param (
     [switch]$EnableWindowsSubsystemForLinux,
     [switch]$DisableTelemetry,
     [switch]$DisableFastStartup,
+    [switch]$DisableSysMain,
+    [switch]$EnableHardwareGpuScheduling,
+    [switch]$DisableNetworkThrottling,
+    [switch]$DisableBackgroundApps,
+    [switch]$DisableStartupDelay,
+    [switch]$EnableHighPerformancePower,
     [switch]$DisableBitlockerAutoEncryption,
     [switch]$DisableModernStandbyNetworking,
     [switch]$DisableStorageSense,
@@ -208,7 +215,7 @@ $script:LoadAppsDetailsScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 
 $script:TestAppInWingetListScriptPath = Join-Path (Join-Path $scriptsPath 'AppRemoval') 'Test-AppInWingetList.ps1'
 $script:ImportLanguageFileScriptPath = Join-Path (Join-Path $scriptsPath 'FileIO') 'Import-LanguageFile.ps1'
 
-$script:ControlParams = 'WhatIf', 'Confirm', 'Verbose', 'Debug', 'LogPath', 'Language', 'Silent', 'Sysprep', 'User', 'SkipExplorerRestart', 'SkipRegistryBackup', 'RunDefaults', 'RunDefaultsLite', 'RunSavedSettings', 'Config', 'CLI', 'AppRemovalTarget'
+$script:ControlParams = 'WhatIf', 'Confirm', 'Verbose', 'Debug', 'LogPath', 'Language', 'Silent', 'Sysprep', 'User', 'SkipExplorerRestart', 'SkipRegistryBackup', 'RunDefaults', 'RunDefaultsLite', 'RunSavedSettings', 'Config', 'ProfileName', 'CLI', 'AppRemovalTarget'
 
 # Script-level variables for GUI elements
 $script:GuiWindow = $null
@@ -393,6 +400,7 @@ if (-not $script:WingetInstalled -and -not $Silent) {
 . "$PSScriptRoot/Scripts/Features/Set-StoreSearchSuggestions.ps1"
 . "$PSScriptRoot/Scripts/Features/Telemetry-ScheduledTasks.ps1"
 . "$PSScriptRoot/Scripts/Features/Windows-OptionalFeatures.ps1"
+. "$PSScriptRoot/Scripts/Features/Set-PowerPlan.ps1"
 . "$PSScriptRoot/Scripts/Features/Import-RegistryFile.ps1"
 . "$PSScriptRoot/Scripts/Features/Replace-StartMenu.ps1"
 . "$PSScriptRoot/Scripts/Features/Invoke-RestartExplorer.ps1"
@@ -483,6 +491,26 @@ $script:UndoParams = @{}
 # Add default Apps parameter when RemoveApps is requested and Apps was not explicitly provided
 if ((-not $script:Params.ContainsKey("Apps")) -and $script:Params.ContainsKey("RemoveApps")) {
     $script:Params.Add('Apps', 'Default')
+}
+
+# Resolve -ProfileName to the matching preset in Config/Profiles, which is then loaded like -Config
+if ($ProfileName) {
+    if ($Config) {
+        Write-Error "The -ProfileName and -Config parameters cannot be combined"
+        Wait-ForKeyPress -ExitCode 1
+    }
+
+    $profilesPath = Join-Path $configPath 'Profiles'
+    $profileFile = Get-ChildItem -LiteralPath $profilesPath -Filter '*.json' -File -ErrorAction SilentlyContinue |
+        Where-Object { $_.BaseName -ieq $ProfileName } | Select-Object -First 1
+
+    if (-not $profileFile) {
+        $available = (Get-ChildItem -LiteralPath $profilesPath -Filter '*.json' -File -ErrorAction SilentlyContinue | ForEach-Object { $_.BaseName }) -join ', '
+        Write-Error "Unknown profile '$ProfileName'. Available profiles: $available"
+        Wait-ForKeyPress -ExitCode 1
+    }
+
+    $Config = $profileFile.FullName
 }
 
 $controlParamsCount = 0

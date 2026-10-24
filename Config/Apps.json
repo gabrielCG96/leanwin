@@ -1112,6 +1112,38 @@
       "SelectedByDefault": false,
       "Recommendation": "optional",
       "RemovalMethod": "Appx"
+    },
+    {
+      "FriendlyName": "Acer Care Center",
+      "AppId": "AcerIncorporated.AcerCareCenterS",
+      "Description": "Acer OEM app for system diagnostics, updates and support",
+      "SelectedByDefault": false,
+      "Recommendation": "optional",
+      "RemovalMethod": "Appx"
+    },
+    {
+      "FriendlyName": "Acer Registration",
+      "AppId": "AcerIncorporated.AcerRegistration",
+      "Description": "Acer OEM app for registering the device and receiving offers",
+      "SelectedByDefault": false,
+      "Recommendation": "optional",
+      "RemovalMethod": "Appx"
+    },
+    {
+      "FriendlyName": "Acer Quick Access",
+      "AppId": "AcerIncorporated.QuickAccess",
+      "Description": "Acer OEM app with quick toggles for device settings",
+      "SelectedByDefault": false,
+      "Recommendation": "optional",
+      "RemovalMethod": "Appx"
+    },
+    {
+      "FriendlyName": "MyASUS",
+      "AppId": "B9ECED6F.MyASUS",
+      "Description": "ASUS OEM app for support, diagnostics and device settings",
+      "SelectedByDefault": false,
+      "Recommendation": "optional",
+      "RemovalMethod": "Appx"
     }
   ],
   "Presets": [
@@ -1151,7 +1183,11 @@
         "LGElectronics.LGMonitorApp",
         "DellInc.DellSupportAssistforPCs",
         "DellInc.DellDigitalDelivery",
-        "DellInc.DellMobileConnect"
+        "DellInc.DellMobileConnect",
+        "AcerIncorporated.AcerCareCenterS",
+        "AcerIncorporated.AcerRegistration",
+        "AcerIncorporated.QuickAccess",
+        "B9ECED6F.MyASUS"
       ]
     }
   ]

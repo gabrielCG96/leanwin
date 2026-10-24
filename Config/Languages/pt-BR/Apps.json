@@ -554,5 +554,21 @@
   "DellInc.DellMobileConnect": {
     "FriendlyName": "Dell Mobile Connect",
     "Description": "App OEM da Dell para vincular um celular Android/iOS ao PC (substituído pelo Phone Link)"
+  },
+  "AcerIncorporated.AcerCareCenterS": {
+    "FriendlyName": "Acer Care Center",
+    "Description": "App OEM da Acer para diagnóstico, atualizações e suporte do sistema"
+  },
+  "AcerIncorporated.AcerRegistration": {
+    "FriendlyName": "Acer Registration",
+    "Description": "App OEM da Acer para registrar o dispositivo e receber ofertas"
+  },
+  "AcerIncorporated.QuickAccess": {
+    "FriendlyName": "Acer Quick Access",
+    "Description": "App OEM da Acer com atalhos rápidos para configurações do dispositivo"
+  },
+  "B9ECED6F.MyASUS": {
+    "FriendlyName": "MyASUS",
+    "Description": "App OEM da ASUS para suporte, diagnóstico e configurações do dispositivo"
   }
 }

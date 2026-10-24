@@ -1,0 +1,44 @@
+{
+    "Version": "1.0",
+    "Description": "Minimal and safe: only low-risk privacy and clutter tweaks, no app removal.",
+    "Tweaks": [
+        {
+            "Name": "DisableTelemetry",
+            "Value": true
+        },
+        {
+            "Name": "DisableSuggestions",
+            "Value": true
+        },
+        {
+            "Name": "DisableLockscreenTips",
+            "Value": true
+        },
+        {
+            "Name": "DisableEdgeAds",
+            "Value": true
+        },
+        {
+            "Name": "DisableBing",
+            "Value": true
+        },
+        {
+            "Name": "DisableStoreSearchSuggestions",
+            "Value": true
+        },
+        {
+            "Name": "HideChat",
+            "Value": true
+        },
+        {
+            "Name": "ShowKnownFileExt",
+            "Value": true
+        }
+    ],
+    "Deployment": [
+        {
+            "Name": "CreateRestorePoint",
+            "Value": true
+        }
+    ]
+}

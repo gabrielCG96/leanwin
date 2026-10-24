@@ -350,6 +350,48 @@
       "UndoLabel": "Habilitar inicialização rápida",
       "ApplyUndoText": "Habilitando inicialização rápida"
     },
+    "DisableSysMain": {
+      "Label": "Desabilitar o serviço SysMain (Superfetch)",
+      "ToolTip": "O SysMain pré-carrega na memória os aplicativos mais usados. Em SSDs o ganho é pequeno e ele só adiciona atividade em segundo plano de disco e memória. Recomendado apenas para sistemas instalados em SSD. Entra em vigor após reiniciar.",
+      "ApplyText": "Desabilitando o serviço SysMain (Superfetch)",
+      "UndoLabel": "Habilitar o serviço SysMain (Superfetch)",
+      "ApplyUndoText": "Habilitando o serviço SysMain (Superfetch)"
+    },
+    "EnableHardwareGpuScheduling": {
+      "Label": "Habilitar o agendamento de GPU acelerado por hardware",
+      "ToolTip": "Permite que a GPU gerencie o próprio agendamento de memória de vídeo, o que pode reduzir a latência em jogos e aplicativos de vídeo. Requer uma GPU compatível e um driver recente; em hardware sem suporte a configuração é ignorada. Entra em vigor após reiniciar.",
+      "ApplyText": "Habilitando o agendamento de GPU acelerado por hardware",
+      "UndoLabel": "Restaurar o agendamento de GPU padrão",
+      "ApplyUndoText": "Restaurando o agendamento de GPU padrão"
+    },
+    "DisableNetworkThrottling": {
+      "Label": "Desabilitar a limitação de rede e priorizar aplicativos em primeiro plano",
+      "ToolTip": "Remove o limite que o Windows aplica ao processamento de pacotes de rede enquanto aplicativos multimídia estão em execução e dá prioridade aos programas em primeiro plano sobre as tarefas em segundo plano. Útil para jogos e transmissões. Entra em vigor após reiniciar.",
+      "ApplyText": "Desabilitando a limitação de rede",
+      "UndoLabel": "Habilitar a limitação de rede",
+      "ApplyUndoText": "Restaurando a limitação de rede padrão"
+    },
+    "DisableBackgroundApps": {
+      "Label": "Impedir que aplicativos sejam executados em segundo plano",
+      "ToolTip": "Impede que aplicativos da Microsoft Store sejam executados em segundo plano quando você não os está usando, economizando memória, CPU e bateria. Os aplicativos não atualizam blocos dinâmicos nem enviam notificações enquanto estiverem fechados.",
+      "ApplyText": "Impedindo que aplicativos sejam executados em segundo plano",
+      "UndoLabel": "Permitir que aplicativos sejam executados em segundo plano",
+      "ApplyUndoText": "Permitindo que aplicativos sejam executados em segundo plano"
+    },
+    "DisableStartupDelay": {
+      "Label": "Remover o atraso antes da execução dos aplicativos de inicialização",
+      "ToolTip": "O Windows espera alguns segundos após o login antes de iniciar seus aplicativos de inicialização. Isso remove a espera para que eles comecem a carregar imediatamente.",
+      "ApplyText": "Removendo o atraso dos aplicativos de inicialização",
+      "UndoLabel": "Restaurar o atraso dos aplicativos de inicialização",
+      "ApplyUndoText": "Restaurando o atraso dos aplicativos de inicialização"
+    },
+    "EnableHighPerformancePower": {
+      "Label": "Usar o plano de energia Alto desempenho",
+      "ToolTip": "Altera o Windows para o plano de energia Alto desempenho, que mantém a CPU sempre responsiva ao custo de maior consumo de energia. Não recomendado para notebooks na bateria. Desfazer volta ao plano Equilibrado.",
+      "ApplyText": "Ativando o plano de energia Alto desempenho",
+      "UndoLabel": "Usar o plano de energia Equilibrado",
+      "ApplyUndoText": "Ativando o plano de energia Equilibrado"
+    },
     "DisableBitlockerAutoEncryption": {
       "Label": "Desabilitar criptografia automática de dispositivos do BitLocker",
       "ToolTip": "Para dispositivos que suportam, o Windows 11 habilita automaticamente a criptografia de dispositivos BitLocker. Desabilitar isso desligará a criptografia automática do dispositivo, mas você ainda pode habilitar manualmente a criptografia BitLocker se desejar. Unidades que já estão criptografadas com BitLocker permanecerão criptografadas quando esta configuração for aplicada.",

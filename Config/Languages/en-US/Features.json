@@ -350,6 +350,48 @@
       "UndoLabel": "Enable fast start-up",
       "ApplyUndoText": "Enabling Fast Start-up"
     },
+    "DisableSysMain": {
+      "Label": "Disable SysMain (Superfetch) service",
+      "ToolTip": "SysMain preloads frequently used apps into memory. On SSDs this brings little benefit and only adds background disk and memory activity. Only recommended for systems that run Windows from an SSD. Takes effect after a restart.",
+      "ApplyText": "Disabling the SysMain (Superfetch) service",
+      "UndoLabel": "Enable SysMain (Superfetch) service",
+      "ApplyUndoText": "Enabling the SysMain (Superfetch) service"
+    },
+    "EnableHardwareGpuScheduling": {
+      "Label": "Enable hardware-accelerated GPU scheduling",
+      "ToolTip": "Lets the GPU manage its own video memory scheduling, which can reduce latency in games and video apps. Requires a compatible GPU and a recent driver; on unsupported hardware the setting is ignored. Takes effect after a restart.",
+      "ApplyText": "Enabling hardware-accelerated GPU scheduling",
+      "UndoLabel": "Restore default GPU scheduling",
+      "ApplyUndoText": "Restoring default GPU scheduling"
+    },
+    "DisableNetworkThrottling": {
+      "Label": "Disable network throttling and prioritize foreground apps",
+      "ToolTip": "Removes the limit Windows places on network packet processing while multimedia apps run, and gives foreground programs priority over background tasks. Useful for gaming and streaming. Takes effect after a restart.",
+      "ApplyText": "Disabling network throttling",
+      "UndoLabel": "Enable network throttling",
+      "ApplyUndoText": "Restoring default network throttling"
+    },
+    "DisableBackgroundApps": {
+      "Label": "Prevent apps from running in the background",
+      "ToolTip": "Stops Microsoft Store apps from running in the background when you are not using them, saving memory, CPU and battery. Apps will not update live tiles or send notifications while closed.",
+      "ApplyText": "Preventing apps from running in the background",
+      "UndoLabel": "Allow apps to run in the background",
+      "ApplyUndoText": "Allowing apps to run in the background"
+    },
+    "DisableStartupDelay": {
+      "Label": "Remove the delay before startup apps launch",
+      "ToolTip": "Windows waits a few seconds after sign-in before launching your startup apps. This removes that wait so startup apps begin loading right away.",
+      "ApplyText": "Removing the startup app delay",
+      "UndoLabel": "Restore the startup app delay",
+      "ApplyUndoText": "Restoring the startup app delay"
+    },
+    "EnableHighPerformancePower": {
+      "Label": "Use the High performance power plan",
+      "ToolTip": "Switches Windows to the High performance power plan, which keeps the CPU responsive at the cost of higher power use. Not recommended for laptops on battery. Undo switches back to the Balanced plan.",
+      "ApplyText": "Activating the High performance power plan",
+      "UndoLabel": "Use the Balanced power plan",
+      "ApplyUndoText": "Activating the Balanced power plan"
+    },
     "DisableBitlockerAutoEncryption": {
       "Label": "Disable BitLocker automatic device encryption",
       "ToolTip": "For devices that support it, Windows 11 automatically enables BitLocker device encryption. Disabling this will turn off automatic encryption of the device, but you can still manually enable BitLocker encryption if desired. Drives that are already encrypted with BitLocker will remain encrypted when this setting is applied.",
