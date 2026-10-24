@@ -24,6 +24,12 @@ function Show-MainWindow {
     Set-WindowThemeResources -window $window -usesDarkMode $usesDarkMode
     Update-WindowLanguageResources -Window $window
 
+    # LEANWIN window and taskbar icon
+    $brandIcon = Join-Path $script:AssetsPath 'Brand\leanwin.ico'
+    if (Test-Path -LiteralPath $brandIcon) {
+        try { $window.Icon = [System.Windows.Media.Imaging.BitmapFrame]::Create([Uri]::new($brandIcon)) } catch { Write-Verbose "Unable to load the window icon: $($_.Exception.Message)" }
+    }
+
     $mainBorder = $window.FindName('MainBorder')
     $titleBarBackground = $window.FindName('TitleBarBackground')
     $kofiBtn = $window.FindName('KofiBtn')

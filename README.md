@@ -1,5 +1,11 @@
-# Win11Debloat
+<p align="center"><img src="Assets/Brand/leanwin-512.png" width="128" alt="LEANWIN"></p>
+<h1 align="center">LEANWIN</h1>
+<p align="center"><b>Mais FPS. Menos lixo.</b></p>
+<p align="center">Otimização e limpeza do Windows em PowerShell, com perfis prontos, relatório antes/depois e desfazer. Fork do <a href="https://github.com/Raphire/Win11Debloat">Win11Debloat</a> de Raphire (licença MIT).</p>
 
+---
+
+## Win11Debloat (projeto original)
 [![GitHub Release](https://img.shields.io/github/v/release/Raphire/Win11Debloat?style=for-the-badge&label=Latest%20release)](https://github.com/Raphire/Win11Debloat/releases/latest)
 [![Join the Discussion](https://img.shields.io/badge/Join-the%20Discussion-2D9F2D?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Raphire/Win11Debloat/discussions)
 [![Static Badge](https://img.shields.io/badge/Documentation-_?style=for-the-badge&logo=bookstack&color=grey)](https://github.com/Raphire/Win11Debloat/wiki/)

@@ -29,85 +29,87 @@ function Set-WindowThemeResources {
         [bool]$usesDarkMode
     )
 
+    # LEANWIN brand palette: Void, Panel and Ice for the dark theme, a darkened Volt Lime for the light theme
     $ThemeColor = @{
         App = @{
-            AccentColor = @{ Light = '#ffae00'; Dark = '#ffd700' }
-            BorderColor = @{ Light = '#ededed'; Dark = '#404040' }
-            BgColor     = @{ Light = '#f3f3f3'; Dark = '#202020' }
-            FgColor     = @{ Light = '#000000'; Dark = '#ffffff' }
-            IdColor     = @{ Light = '#666666'; Dark = '#afafaf' }
+            AccentColor = @{ Light = '#5e7f00'; Dark = '#c8ff2e' }
+            BorderColor = @{ Light = '#dde1e8'; Dark = '#262a35' }
+            BgColor     = @{ Light = '#f2f4f7'; Dark = '#0a0b0f' }
+            FgColor     = @{ Light = '#0a0b0f'; Dark = '#f2f4f7' }
+            IdColor     = @{ Light = '#5b6270'; Dark = '#9aa3b2' }
         }
 
         Card = @{
-            BgColor = @{ Light = '#fbfbfb'; Dark = '#2b2b2b' }
+            BgColor = @{ Light = '#ffffff'; Dark = '#14161d' }
         }
 
         Button = @{
-            BorderColor       = @{ Light = '#d3d3d3'; Dark = '#404040' }
-            BgColor           = @{ Light = '#0067c0'; Dark = '#0067c0' }
-            DisabledColor     = @{ Light = '#bfbfbf'; Dark = '#434343' }
-            HoverColor        = @{ Light = '#1975c5'; Dark = '#1975c5' }
-            PressedColor      = @{ Light = '#3183ca'; Dark = '#3183ca' }
-            TextDisabledColor = @{ Light = '#ffffff'; Dark = '#989898' }
+            BorderColor       = @{ Light = '#cbd1db'; Dark = '#262a35' }
+            BgColor           = @{ Light = '#5e7f00'; Dark = '#c8ff2e' }
+            DisabledColor     = @{ Light = '#c9ced7'; Dark = '#262a35' }
+            HoverColor        = @{ Light = '#6e9400'; Dark = '#d6ff5c' }
+            PressedColor      = @{ Light = '#4b6700'; Dark = '#aee01a' }
+            TextColor         = @{ Light = '#ffffff'; Dark = '#0a0b0f' }
+            TextDisabledColor = @{ Light = '#ffffff'; Dark = '#6b7385' }
         }
 
         SecondaryButton = @{
-            BgColor           = @{ Light = '#fbfbfb'; Dark = '#393939' }
-            DisabledColor     = @{ Light = '#f7f7f7'; Dark = '#3b3b3b' }
-            HoverColor        = @{ Light = '#f6f6f6'; Dark = '#2a2a2a' }
-            PressedColor      = @{ Light = '#f0f0f0'; Dark = '#1e1e1e' }
-            TextDisabledColor = @{ Light = '#b7b7b7'; Dark = '#787878' }
+            BgColor           = @{ Light = '#ffffff'; Dark = '#1b1e27' }
+            DisabledColor     = @{ Light = '#f2f4f7'; Dark = '#14161d' }
+            HoverColor        = @{ Light = '#eef0f4'; Dark = '#232733' }
+            PressedColor      = @{ Light = '#e3e6ec'; Dark = '#14161d' }
+            TextDisabledColor = @{ Light = '#a7aebb'; Dark = '#6b7385' }
         }
 
         CheckBox = @{
-            BgColor     = @{ Light = '#f5f5f5'; Dark = '#272727' }
-            BorderColor = @{ Light = '#898989'; Dark = '#808080' }
-            HoverColor  = @{ Light = '#ececec'; Dark = '#343434' }
+            BgColor     = @{ Light = '#ffffff'; Dark = '#14161d' }
+            BorderColor = @{ Light = '#7a8394'; Dark = '#6b7385' }
+            HoverColor  = @{ Light = '#eef0f4'; Dark = '#1b1e27' }
         }
 
         ComboBox = @{
-            BgColor           = @{ Light = '#ffffff'; Dark = '#373737' }
-            HoverColor        = @{ Light = '#f8f8f8'; Dark = '#434343' }
-            ItemBgColor       = @{ Light = '#f9f9f9'; Dark = '#2c2c2c' }
-            ItemHoverColor    = @{ Light = '#f0f0f0'; Dark = '#383838' }
-            ItemSelectedColor = @{ Light = '#f3f3f3'; Dark = '#343434' }
+            BgColor           = @{ Light = '#ffffff'; Dark = '#14161d' }
+            HoverColor        = @{ Light = '#eef0f4'; Dark = '#1b1e27' }
+            ItemBgColor       = @{ Light = '#ffffff'; Dark = '#14161d' }
+            ItemHoverColor    = @{ Light = '#eef0f4'; Dark = '#1b1e27' }
+            ItemSelectedColor = @{ Light = '#e3e6ec'; Dark = '#232733' }
         }
 
         TextBox = @{
-            BorderColor     = @{ Light = '#bdbdbd'; Dark = '#989a9d' }
-            BgColor         = @{ Light = '#fbfbfb'; Dark = '#2d2d2d' }
-            FocusColor      = @{ Light = '#ffffff'; Dark = '#1f1f1f' }
-            HoverColor      = @{ Light = '#f6f6f6'; Dark = '#323232' }
-            SideBorderColor = @{ Light = '#ececec'; Dark = '#343434' }
+            BorderColor     = @{ Light = '#b6bdc9'; Dark = '#4a5162' }
+            BgColor         = @{ Light = '#ffffff'; Dark = '#14161d' }
+            FocusColor      = @{ Light = '#ffffff'; Dark = '#0a0b0f' }
+            HoverColor      = @{ Light = '#f5f6f9'; Dark = '#1b1e27' }
+            SideBorderColor = @{ Light = '#dde1e8'; Dark = '#262a35' }
         }
 
         ScrollBar = @{
-            ThumbColor      = @{ Light = '#b9b9b9'; Dark = '#3d3d3d' }
-            ThumbHoverColor = @{ Light = '#8b8b8b'; Dark = '#4b4b4b' }
+            ThumbColor      = @{ Light = '#b6bdc9'; Dark = '#2f3441' }
+            ThumbHoverColor = @{ Light = '#8a93a5'; Dark = '#444b5c' }
         }
 
         TitleBar = @{
-            ButtonHoverColor   = @{ Light = '#dcdcdc'; Dark = '#353535' }
-            ButtonPressedColor = @{ Light = '#cccccc'; Dark = '#333333' }
-            CloseHoverColor    = @{ Light = '#e81123'; Dark = '#e81123' }
-            ClosePressedColor  = @{ Light = '#f1707a'; Dark = '#f1707a' }
-            UnfocusedFgColor   = @{ Light = '#868686'; Dark = '#969696' }
+            ButtonHoverColor   = @{ Light = '#dde1e8'; Dark = '#1b1e27' }
+            ButtonPressedColor = @{ Light = '#cbd1db'; Dark = '#232733' }
+            CloseHoverColor    = @{ Light = '#ff4b3a'; Dark = '#ff4b3a' }
+            ClosePressedColor  = @{ Light = '#ff8a7e'; Dark = '#ff8a7e' }
+            UnfocusedFgColor   = @{ Light = '#8a93a5'; Dark = '#6b7385' }
         }
 
         Search = @{
-            HighlightActiveColor = @{ Light = '#ffd966'; Dark = '#8a7000' }
-            HighlightColor       = @{ Light = '#fff4ce'; Dark = '#4a4a2a' }
+            HighlightActiveColor = @{ Light = '#c8ff2e'; Dark = '#5e7f00' }
+            HighlightColor       = @{ Light = '#eaf9b8'; Dark = '#2a3410' }
         }
 
         Table = @{
-            HeaderColor = @{ Light = '#ffffff'; Dark = '#303030' }
+            HeaderColor = @{ Light = '#ffffff'; Dark = '#14161d' }
         }
 
         Icon = @{
-            ErrorColor       = @{ Light = '#e81123'; Dark = '#e81123' }
-            InformationColor = @{ Light = '#0078d4'; Dark = '#0078d4' }
-            QuestionColor    = @{ Light = '#0078d4'; Dark = '#0078d4' }
-            SuccessColor     = @{ Light = '#107c10'; Dark = '#107c10' }
+            ErrorColor       = @{ Light = '#ff4b3a'; Dark = '#ff4b3a' }
+            InformationColor = @{ Light = '#0078d4'; Dark = '#4da3ff' }
+            QuestionColor    = @{ Light = '#0078d4'; Dark = '#4da3ff' }
+            SuccessColor     = @{ Light = '#5e7f00'; Dark = '#c8ff2e' }
             WarningColor     = @{ Light = '#ffb900'; Dark = '#ffb900' }
         }
     }

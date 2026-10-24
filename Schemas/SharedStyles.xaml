@@ -28,7 +28,7 @@
     <!-- Primary Button Style -->
     <Style x:Key="PrimaryButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{DynamicResource ButtonBgColor}"/>
-        <Setter Property="Foreground" Value="white"/>
+        <Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ButtonBgColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="0"/>
@@ -453,7 +453,7 @@
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="CheckBoxBorder" Property="Background" Value="{DynamicResource ButtonBgColor}"/>
                             <Setter TargetName="CheckBoxBorder" Property="BorderBrush" Value="{DynamicResource ButtonBgColor}"/>
-                            <Setter TargetName="CheckMark" Property="Foreground" Value="White"/>
+                            <Setter TargetName="CheckMark" Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
                             <Setter TargetName="CheckMark" Property="Opacity" Value="1"/>
                             <Setter TargetName="IndeterminateMark" Property="Opacity" Value="0"/>
                             <Trigger.EnterActions>
@@ -476,7 +476,7 @@
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter TargetName="CheckBoxBorder" Property="Background" Value="{DynamicResource ButtonBgColor}"/>
                             <Setter TargetName="CheckBoxBorder" Property="BorderBrush" Value="{DynamicResource ButtonBgColor}"/>
-                            <Setter TargetName="IndeterminateMark" Property="Foreground" Value="White"/>
+                            <Setter TargetName="IndeterminateMark" Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
                             <Setter TargetName="IndeterminateMark" Property="Opacity" Value="1"/>
                             <Setter TargetName="CheckMark" Property="Opacity" Value="0"/>
                             <Trigger.EnterActions>
